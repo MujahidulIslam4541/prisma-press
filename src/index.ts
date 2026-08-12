@@ -6,14 +6,15 @@ const port =config.port
 
 async function main() {
   try {
-    // await prisma.$connect();
-    // console.log("connected prisma orm");
+    await prisma.$connect();
+    console.log("connected prisma orm");
 
     app.listen(port, () => {
       console.log(`server is running on ${port}`);
     });
   } catch (error) {
     console.log("server error ", error);
+    await prisma.$disconnect()
     process.exit(1);
   }
 }
