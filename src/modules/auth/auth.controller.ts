@@ -12,7 +12,7 @@ const signInUser = catchAsync(async (req: Request, res: Response) => {
         success: true,
         statusCode: HttpStatus.OK,
         message: "User created Success",
-        data: { user }
+        data: user 
     }))
 })
 

@@ -1,6 +1,8 @@
+import config from "../../config";
 import { prisma } from "../../lib/prisma";
 import type { AuthInterface } from "./auth.types";
 import bcrypt from "bcrypt"
+import jwt, { type SignOptions } from "jsonwebtoken"
 
 const signInUserIntoDB = async (payload: AuthInterface) => {
     const { email, password } = payload;
@@ -15,7 +17,18 @@ const signInUserIntoDB = async (payload: AuthInterface) => {
         throw new Error("credential not match please provide valid credential")
     }
 
-    return user
+    const accessToken = jwt.sign(({ id: user.id, email: user.email }), config.jwt_access_token!, {
+        expiresIn: config.jwt_access_token_aspiredIn || "1d"
+    } as SignOptions)
+
+    const refreshToken = jwt.sign(({ id: user.id, email: user.email }), config.jwt_refresh_token!, {
+        expiresIn: config.jwt_refresh_token_aspiredIn || "7d"
+    } as SignOptions)
+
+    return {
+        accessToken,
+        refreshToken
+    }
 
 }
 
