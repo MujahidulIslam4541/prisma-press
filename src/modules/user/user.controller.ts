@@ -25,9 +25,19 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
     const { accessToken } = req.cookies
 
     const verifyToken = verifiedToken(accessToken, config.jwt_access_token)
-    console.log(verifyToken)
 
-    res.send("get my profile")
+    if (typeof verifyToken === "string") {
+        throw new Error(verifyToken)
+    }
+
+    const user = await userService.getUserProfileInDB(verifyToken.id)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "User profile get successfully",
+        data: user
+    })
 })
 
 export const userController = {
