@@ -6,13 +6,27 @@ import HttpStatus from "http-status";
 
 const signInUser = catchAsync(async (req: Request, res: Response) => {
     const payload = req.body
-    const user = await authService.signInUserIntoDB(payload)
+    const { accessToken, refreshToken } = await authService.signInUserIntoDB(payload)
+
+    res.cookie("accessToken", accessToken, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: false,
+        maxAge: 1 * 24 * 60 * 60 * 1000
+    })
+
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        sameSite: "none",
+        secure: false,
+        maxAge: 7 * 24 * 60 * 60 * 1000
+    })
 
     sendResponse(res, ({
         success: true,
         statusCode: HttpStatus.OK,
         message: "User created Success",
-        data: user 
+        data: { accessToken, refreshToken }
     }))
 })
 

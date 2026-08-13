@@ -3,6 +3,8 @@ import type { NextFunction, Request, RequestHandler, Response } from "express"
 import { userService } from "./user.service";
 import { catchAsync } from "../../utils/CatchAsync";
 import { sendResponse } from "../../utils/SendResponse";
+import config from "../../config";
+import { verifiedToken } from "../../utils/JwtToken";
 
 
 const createUser = catchAsync(async (req: Request, res: Response) => {
@@ -19,6 +21,16 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 
 })
 
+const getUserProfile = catchAsync(async (req: Request, res: Response) => {
+    const { accessToken } = req.cookies
+
+    const verifyToken = verifiedToken(accessToken, config.jwt_access_token)
+    console.log(verifyToken)
+
+    res.send("get my profile")
+})
+
 export const userController = {
-    createUser
+    createUser,
+    getUserProfile
 }
