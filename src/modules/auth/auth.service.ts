@@ -17,11 +17,11 @@ const signInUserIntoDB = async (payload: AuthInterface) => {
         throw new Error("credential not match please provide valid credential")
     }
 
-    const accessToken = jwt.sign(({ id: user.id, email: user.email }), config.jwt_access_token!, {
+    const accessToken = jwt.sign(({ id: user.id, email: user.email, role: user.role }), config.jwt_access_token!, {
         expiresIn: config.jwt_access_token_aspiredIn || "1d"
     } as SignOptions)
 
-    const refreshToken = jwt.sign(({ id: user.id, email: user.email }), config.jwt_refresh_token!, {
+    const refreshToken = jwt.sign(({ id: user.id, email: user.email, role: user.role }), config.jwt_refresh_token!, {
         expiresIn: config.jwt_refresh_token_aspiredIn || "7d"
     } as SignOptions)
 

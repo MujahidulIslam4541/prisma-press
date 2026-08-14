@@ -22,15 +22,15 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
-    const { accessToken } = req.cookies
+    // const { accessToken } = req.cookies
 
-    const verifyToken = verifiedToken(accessToken, config.jwt_access_token)
+    // const verifyToken = verifiedToken(accessToken, config.jwt_access_token)
 
-    if (typeof verifyToken === "string") {
-        throw new Error(verifyToken)
-    }
+    // if (typeof verifyToken === "string") {
+    //     throw new Error(verifyToken)
+    // }
 
-    const user = await userService.getUserProfileInDB(verifyToken.id)
+    const user = await userService.getUserProfileInDB(req.user?.id as string)
 
     sendResponse(res, {
         success: true,
