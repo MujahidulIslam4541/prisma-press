@@ -11,6 +11,10 @@ const signInUserIntoDB = async (payload: AuthInterface) => {
         where: { email }
     })
 
+    if (user.activeStatus === "BLOCKED") {
+        throw new Error("your account has been blocked please contact support ")
+    }
+
     const matchPassword = await bcrypt.compare(password, user.password)
 
     if (!matchPassword) {
