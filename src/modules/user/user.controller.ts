@@ -22,7 +22,7 @@ const createUser = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getUserProfile = catchAsync(async (req: Request, res: Response) => {
-    
+
     const user = await userService.getUserProfileInDB(req.user?.id as string)
 
     sendResponse(res, {
@@ -33,7 +33,22 @@ const getUserProfile = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
+const updateMyProfile = catchAsync(async (req: Request, res: Response) => {
+    const userId = req.user?.id
+    const payload = req.body
+
+    const updatedUser = await userService.updateMyProfileInDB(userId as string, payload)
+
+    sendResponse(res, ({
+        success: true,
+        statusCode: HttpStatus.CREATED,
+        message: "user profile updated successfully",
+        data: {updatedUser}
+    }))
+})
+
 export const userController = {
     createUser,
-    getUserProfile
+    getUserProfile,
+    updateMyProfile
 }
