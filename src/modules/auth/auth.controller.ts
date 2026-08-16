@@ -30,4 +30,15 @@ const signInUser = catchAsync(async (req: Request, res: Response) => {
     }))
 })
 
-export const authController = { signInUser }
+const refreshToken = catchAsync(async (req: Request, res: Response) => {
+    const token = req.cookies.refreshToken;
+    await authService.refreshToken(token)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "Refresh token created"
+    })
+})
+
+export const authController = { signInUser, refreshToken }

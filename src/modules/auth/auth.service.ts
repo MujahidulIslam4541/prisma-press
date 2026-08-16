@@ -36,4 +36,9 @@ const signInUserIntoDB = async (payload: AuthInterface) => {
 
 }
 
-export const authService = { signInUserIntoDB }
+const refreshToken = async (refreshToken: string) => {
+    const verifyRefreshToken = await jwt.verify(refreshToken, config.jwt_refresh_token)
+
+}
+
+export const authService = { signInUserIntoDB, refreshToken }
