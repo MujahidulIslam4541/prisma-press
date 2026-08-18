@@ -5,7 +5,7 @@ model Post {
     thumbnail  String?    @db.VarChar(255)
     isFeatured Boolean    @default(false)
     status     PostStatus
-    tag        String
+    tag        String[]
     view       Int        @default(0)
     authorId   String
     author     User       @relation(fields: [authorId], references: [id],onDelete: Cascade)

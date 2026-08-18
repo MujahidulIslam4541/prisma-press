@@ -41,7 +41,6 @@ export type PostMinAggregateOutputType = {
   thumbnail: string | null
   isFeatured: boolean | null
   status: $Enums.PostStatus | null
-  tag: string | null
   view: number | null
   authorId: string | null
   createdAt: Date | null
@@ -55,7 +54,6 @@ export type PostMaxAggregateOutputType = {
   thumbnail: string | null
   isFeatured: boolean | null
   status: $Enums.PostStatus | null
-  tag: string | null
   view: number | null
   authorId: string | null
   createdAt: Date | null
@@ -93,7 +91,6 @@ export type PostMinAggregateInputType = {
   thumbnail?: true
   isFeatured?: true
   status?: true
-  tag?: true
   view?: true
   authorId?: true
   createdAt?: true
@@ -107,7 +104,6 @@ export type PostMaxAggregateInputType = {
   thumbnail?: true
   isFeatured?: true
   status?: true
-  tag?: true
   view?: true
   authorId?: true
   createdAt?: true
@@ -222,7 +218,7 @@ export type PostGroupByOutputType = {
   thumbnail: string | null
   isFeatured: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag: string[]
   view: number
   authorId: string
   createdAt: Date
@@ -259,7 +255,7 @@ export type PostWhereInput = {
   thumbnail?: Prisma.StringNullableFilter<"Post"> | string | null
   isFeatured?: Prisma.BoolFilter<"Post"> | boolean
   status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-  tag?: Prisma.StringFilter<"Post"> | string
+  tag?: Prisma.StringNullableListFilter<"Post">
   view?: Prisma.IntFilter<"Post"> | number
   authorId?: Prisma.StringFilter<"Post"> | string
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -294,7 +290,7 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   thumbnail?: Prisma.StringNullableFilter<"Post"> | string | null
   isFeatured?: Prisma.BoolFilter<"Post"> | boolean
   status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-  tag?: Prisma.StringFilter<"Post"> | string
+  tag?: Prisma.StringNullableListFilter<"Post">
   view?: Prisma.IntFilter<"Post"> | number
   authorId?: Prisma.StringFilter<"Post"> | string
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -332,7 +328,7 @@ export type PostScalarWhereWithAggregatesInput = {
   thumbnail?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   isFeatured?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   status?: Prisma.EnumPostStatusWithAggregatesFilter<"Post"> | $Enums.PostStatus
-  tag?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  tag?: Prisma.StringNullableListFilter<"Post">
   view?: Prisma.IntWithAggregatesFilter<"Post"> | number
   authorId?: Prisma.StringWithAggregatesFilter<"Post"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
@@ -346,7 +342,7 @@ export type PostCreateInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -361,7 +357,7 @@ export type PostUncheckedCreateInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   authorId: string
   createdAt?: Date | string
@@ -376,7 +372,7 @@ export type PostUpdateInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -391,7 +387,7 @@ export type PostUncheckedUpdateInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -406,7 +402,7 @@ export type PostCreateManyInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   authorId: string
   createdAt?: Date | string
@@ -420,7 +416,7 @@ export type PostUpdateManyMutationInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -433,7 +429,7 @@ export type PostUncheckedUpdateManyInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -443,6 +439,14 @@ export type PostUncheckedUpdateManyInput = {
 export type PostScalarRelationFilter = {
   is?: Prisma.PostWhereInput
   isNot?: Prisma.PostWhereInput
+}
+
+export type StringNullableListFilter<$PrismaModel = never> = {
+  equals?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel> | null
+  has?: string | Prisma.StringFieldRefInput<$PrismaModel> | null
+  hasEvery?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  hasSome?: string[] | Prisma.ListStringFieldRefInput<$PrismaModel>
+  isEmpty?: boolean
 }
 
 export type PostCountOrderByAggregateInput = {
@@ -470,7 +474,6 @@ export type PostMaxOrderByAggregateInput = {
   thumbnail?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  tag?: Prisma.SortOrder
   view?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -484,7 +487,6 @@ export type PostMinOrderByAggregateInput = {
   thumbnail?: Prisma.SortOrder
   isFeatured?: Prisma.SortOrder
   status?: Prisma.SortOrder
-  tag?: Prisma.SortOrder
   view?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -519,6 +521,10 @@ export type PostUpdateOneRequiredWithoutCommentNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PostUpdateToOneWithWhereWithoutCommentInput, Prisma.PostUpdateWithoutCommentInput>, Prisma.PostUncheckedUpdateWithoutCommentInput>
 }
 
+export type PostCreatetagInput = {
+  set: string[]
+}
+
 export type NullableStringFieldUpdateOperationsInput = {
   set?: string | null
 }
@@ -529,6 +535,11 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type EnumPostStatusFieldUpdateOperationsInput = {
   set?: $Enums.PostStatus
+}
+
+export type PostUpdatetagInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type IntFieldUpdateOperationsInput = {
@@ -588,7 +599,7 @@ export type PostCreateWithoutCommentInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -602,7 +613,7 @@ export type PostUncheckedCreateWithoutCommentInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   authorId: string
   createdAt?: Date | string
@@ -632,7 +643,7 @@ export type PostUpdateWithoutCommentInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -646,7 +657,7 @@ export type PostUncheckedUpdateWithoutCommentInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -660,7 +671,7 @@ export type PostCreateWithoutAuthorInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -674,7 +685,7 @@ export type PostUncheckedCreateWithoutAuthorInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -717,7 +728,7 @@ export type PostScalarWhereInput = {
   thumbnail?: Prisma.StringNullableFilter<"Post"> | string | null
   isFeatured?: Prisma.BoolFilter<"Post"> | boolean
   status?: Prisma.EnumPostStatusFilter<"Post"> | $Enums.PostStatus
-  tag?: Prisma.StringFilter<"Post"> | string
+  tag?: Prisma.StringNullableListFilter<"Post">
   view?: Prisma.IntFilter<"Post"> | number
   authorId?: Prisma.StringFilter<"Post"> | string
   createdAt?: Prisma.DateTimeFilter<"Post"> | Date | string
@@ -731,7 +742,7 @@ export type PostCreateManyAuthorInput = {
   thumbnail?: string | null
   isFeatured?: boolean
   status: $Enums.PostStatus
-  tag: string
+  tag?: Prisma.PostCreatetagInput | string[]
   view?: number
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -744,7 +755,7 @@ export type PostUpdateWithoutAuthorInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -758,7 +769,7 @@ export type PostUncheckedUpdateWithoutAuthorInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -772,7 +783,7 @@ export type PostUncheckedUpdateManyWithoutAuthorInput = {
   thumbnail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumPostStatusFieldUpdateOperationsInput | $Enums.PostStatus
-  tag?: Prisma.StringFieldUpdateOperationsInput | string
+  tag?: Prisma.PostUpdatetagInput | string[]
   view?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -896,7 +907,7 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     thumbnail: string | null
     isFeatured: boolean
     status: $Enums.PostStatus
-    tag: string
+    tag: string[]
     view: number
     authorId: string
     createdAt: Date
@@ -1332,7 +1343,7 @@ export interface PostFieldRefs {
   readonly thumbnail: Prisma.FieldRef<"Post", 'String'>
   readonly isFeatured: Prisma.FieldRef<"Post", 'Boolean'>
   readonly status: Prisma.FieldRef<"Post", 'PostStatus'>
-  readonly tag: Prisma.FieldRef<"Post", 'String'>
+  readonly tag: Prisma.FieldRef<"Post", 'String[]'>
   readonly view: Prisma.FieldRef<"Post", 'Int'>
   readonly authorId: Prisma.FieldRef<"Post", 'String'>
   readonly createdAt: Prisma.FieldRef<"Post", 'DateTime'>
