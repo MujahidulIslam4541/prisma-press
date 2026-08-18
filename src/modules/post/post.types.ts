@@ -8,3 +8,12 @@ export interface postInterface {
     status: PostStatus
     tag: string[]
 }
+
+export interface postUpdateInterface {
+    title?: string,
+    content?: string,
+    thumbnail?: string,
+    status?: PostStatus
+    tag: string[]
+}
+

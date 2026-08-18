@@ -60,5 +60,21 @@ const getMyAllPost = catchAsync(async (req: Request, res: Response) => {
 
 })
 
+const updatedPost = catchAsync(async (req: Request, res: Response) => {
+    const authorId = req.user?.id
+    const payload = req.body
+    const postId = req.params.id
+    const isAdmin = req.user?.role === "ADMIN"
 
-export const postController = { createPost, getAllPost, getPostById, getMyAllPost }
+    const result = await postService.updatedPostIntoDB(postId as string, authorId as string, isAdmin, payload)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.CREATED,
+        message: "post update success",
+        data: result
+    })
+})
+
+
+export const postController = { createPost, getAllPost, getPostById, getMyAllPost ,updatedPost}

@@ -1,5 +1,5 @@
 import { prisma } from "../../lib/prisma"
-import type { postInterface } from "./post.types"
+import type { postInterface, postUpdateInterface } from "./post.types"
 
 const createPostIntoDB = async (payload: postInterface, userId: string) => {
     const createPost = await prisma.post.create({
@@ -83,9 +83,41 @@ const getMyAllPostIntoBD = async (authorId: string) => {
 
 }
 
+const updatedPostIntoDB = async (postId: string, authorId: string, isAdmin: boolean, payload: postUpdateInterface) => {
+
+    const post = await prisma.post.findUniqueOrThrow({
+        where: {
+            id: postId
+        }
+    })
+
+    if (!isAdmin && post.authorId !== authorId) {
+        throw new Error("you are not update this post ")
+    }
+
+    const updatedPost = await prisma.post.update({
+        where: {
+            id: postId
+        },
+        data: payload,
+        include: {
+            author: {
+                omit: {
+                    password: true
+                }
+            },
+            comment: true,
+        }
+
+    })
+
+    return updatedPost
+}
+
 export const postService = {
     createPostIntoDB,
     getAllPostInDB,
     getPostById,
-    getMyAllPostIntoBD
+    getMyAllPostIntoBD,
+    updatedPostIntoDB
 }
