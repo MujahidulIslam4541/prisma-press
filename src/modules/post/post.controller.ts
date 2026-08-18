@@ -32,6 +32,10 @@ const getAllPost = catchAsync(async (req: Request, res: Response) => {
 const getPostById = catchAsync(async (req: Request, res: Response) => {
     const id = req.params.id;
 
+    if (!id) {
+        throw new Error("post not found please provide valid post id ")
+    }
+
     const result = await postService.getPostById(id as string)
 
     sendResponse(res, {
@@ -42,5 +46,19 @@ const getPostById = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
+const getMyAllPost = catchAsync(async (req: Request, res: Response) => {
+    const authorId = req.user?.id
 
-export const postController = { createPost, getAllPost ,getPostById}
+    const result = await postService.getMyAllPostIntoBD(authorId as string)
+
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "your profile all post retrieve success",
+        data: result
+    })
+
+})
+
+
+export const postController = { createPost, getAllPost, getPostById, getMyAllPost }

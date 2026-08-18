@@ -15,7 +15,11 @@ const createPostIntoDB = async (payload: postInterface, userId: string) => {
 const getAllPostInDB = async () => {
     const allPost = await prisma.post.findMany({
         include: {
-            author: true,
+            author: {
+                omit: {
+                    password: true
+                }
+            },
             comment: true
         }
     })
@@ -23,17 +27,65 @@ const getAllPostInDB = async () => {
 }
 
 const getPostById = async (id: string) => {
-    const post = await prisma.post.findFirstOrThrow({
+    await prisma.post.findFirstOrThrow({
         where: {
             id: id
         }
     })
 
-    return post
+    const updatedPost = await prisma.post.update({
+        where: {
+            id: id
+        },
+        data: {
+            view: {
+                increment: 1
+            }
+        },
+        include: {
+            comment: true,
+            author: {
+                omit: {
+                    password: true
+                }
+            }
+        },
+    })
+
+    return updatedPost
+}
+
+const getMyAllPostIntoBD = async (authorId: string) => {
+    const result = await prisma.post.findMany({
+        where: {
+            authorId: authorId
+        },
+        orderBy: {
+            createdAt: "desc"
+        },
+        include: {
+            author: {
+                omit: {
+                    password: true
+                }
+            },
+            comment: true,
+
+            _count: {
+                select: {
+                    comment: true
+                }
+            }
+        }
+    })
+
+    return result;
+
 }
 
 export const postService = {
     createPostIntoDB,
     getAllPostInDB,
-    getPostById
+    getPostById,
+    getMyAllPostIntoBD
 }
