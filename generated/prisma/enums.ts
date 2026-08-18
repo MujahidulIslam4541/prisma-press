@@ -9,6 +9,23 @@
 * 🟢 You can import this file directly.
 */
 
+export const CommentStatus = {
+  APPROVED: 'APPROVED',
+  REJECT: 'REJECT'
+} as const
+
+export type CommentStatus = (typeof CommentStatus)[keyof typeof CommentStatus]
+
+
+export const PostStatus = {
+  PUBLISHED: 'PUBLISHED',
+  DRAFT: 'DRAFT',
+  ARCHIVE: 'ARCHIVE'
+} as const
+
+export type PostStatus = (typeof PostStatus)[keyof typeof PostStatus]
+
+
 export const ActiveStatus = {
   ACTIVE: 'ACTIVE',
   BLOCKED: 'BLOCKED'

@@ -18,6 +18,16 @@ export { Prisma }
 export * as $Enums from './enums.ts'
 export * from './enums.ts';
 /**
+ * Model comment
+ * 
+ */
+export type comment = Prisma.commentModel
+/**
+ * Model Post
+ * 
+ */
+export type Post = Prisma.PostModel
+/**
  * Model Profile
  * 
  */
