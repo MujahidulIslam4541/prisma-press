@@ -1,3 +1,4 @@
+import { CommentStatus } from "../../../generated/prisma/enums"
 import { prisma } from "../../lib/prisma"
 import type { postInterface, postUpdateInterface } from "./post.types"
 
@@ -106,7 +107,11 @@ const updatedPostIntoDB = async (postId: string, authorId: string, isAdmin: bool
                     password: true
                 }
             },
-            comment: true,
+            comment: {
+                where: {
+                    status: CommentStatus.APPROVED
+                }
+            },
         }
 
     })
