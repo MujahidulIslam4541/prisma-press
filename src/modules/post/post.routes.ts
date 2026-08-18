@@ -7,5 +7,6 @@ const router = Router()
 
 router.post("/", authMiddlewares(Role.ADMIN, Role.USER, Role.AUTHOR), postController.createPost)
 router.get('/', postController.getAllPost)
+router.get('/:id', postController.getPostById)
 
 export const postRouter = router

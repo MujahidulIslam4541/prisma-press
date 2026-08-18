@@ -13,12 +13,27 @@ const createPostIntoDB = async (payload: postInterface, userId: string) => {
 }
 
 const getAllPostInDB = async () => {
-    const allPost = await prisma.post.findMany()
+    const allPost = await prisma.post.findMany({
+        include: {
+            author: true,
+            comment: true
+        }
+    })
     return allPost;
 }
 
+const getPostById = async (id: string) => {
+    const post = await prisma.post.findFirstOrThrow({
+        where: {
+            id: id
+        }
+    })
+
+    return post
+}
 
 export const postService = {
     createPostIntoDB,
-    getAllPostInDB
+    getAllPostInDB,
+    getPostById
 }
