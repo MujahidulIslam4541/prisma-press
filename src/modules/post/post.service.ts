@@ -114,10 +114,28 @@ const updatedPostIntoDB = async (postId: string, authorId: string, isAdmin: bool
     return updatedPost
 }
 
+const deletePostIntoDB = async (postId: string, authorId: string, isAdmin: boolean) => {
+    const post = await prisma.post.findUniqueOrThrow({
+        where: { id: postId }
+    })
+
+    if (!isAdmin && post.authorId !== authorId) {
+        throw new Error("your are not actual author or admin this post so you can't delete this post sorry bro")
+    }
+
+    const result = await prisma.post.delete({
+        where: {
+            id: postId
+        }
+    })
+    return result
+}
+
 export const postService = {
     createPostIntoDB,
     getAllPostInDB,
     getPostById,
     getMyAllPostIntoBD,
-    updatedPostIntoDB
+    updatedPostIntoDB,
+    deletePostIntoDB
 }

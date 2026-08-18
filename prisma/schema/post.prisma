@@ -13,7 +13,7 @@ model Post {
     updatedAt  DateTime   @updatedAt
     comment comment[]
 
-    @@map("pots")
+    @@map("posts")
 }
 
 enum PostStatus {

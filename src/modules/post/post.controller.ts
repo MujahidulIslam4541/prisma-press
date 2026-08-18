@@ -76,5 +76,18 @@ const updatedPost = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
+const deletePost = catchAsync(async (req: Request, res: Response) => {
+    const authorId = req.user?.id
+    const postId = req.params.id
+    const isAdmin = req.user?.role === "ADMIN"
+     await postService.deletePostIntoDB(postId as string, authorId as string, isAdmin)
 
-export const postController = { createPost, getAllPost, getPostById, getMyAllPost ,updatedPost}
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "post delete successfully"
+    })
+})
+
+
+export const postController = { createPost, getAllPost, getPostById, getMyAllPost, updatedPost, deletePost}
