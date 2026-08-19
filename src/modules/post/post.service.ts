@@ -28,32 +28,38 @@ const getAllPostInDB = async () => {
 }
 
 const getPostById = async (id: string) => {
-    await prisma.post.findFirstOrThrow({
-        where: {
-            id: id
-        }
-    })
-
-    const updatedPost = await prisma.post.update({
-        where: {
-            id: id
-        },
-        data: {
-            view: {
-                increment: 1
-            }
-        },
-        include: {
-            comment: true,
-            author: {
-                omit: {
-                    password: true
+    const transactionResult = await prisma.$transaction(
+        async (tx) => {
+            await tx.post.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    view: {
+                        increment: 1
+                    }
                 }
-            }
-        },
-    })
+            })
+            const post = await tx.post.findUniqueOrThrow({
+                where: {
+                    id: id
+                },
+                include: {
+                    comment: true,
+                    author: {
+                        omit: {
+                            password: true
+                        }
+                    }
+                },
+            })
 
-    return updatedPost
+            return post
+        }
+
+    )
+
+    return transactionResult
 }
 
 const getMyAllPostIntoBD = async (authorId: string) => {
