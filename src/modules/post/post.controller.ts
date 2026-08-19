@@ -80,7 +80,7 @@ const deletePost = catchAsync(async (req: Request, res: Response) => {
     const authorId = req.user?.id
     const postId = req.params.id
     const isAdmin = req.user?.role === "ADMIN"
-     await postService.deletePostIntoDB(postId as string, authorId as string, isAdmin)
+    await postService.deletePostIntoDB(postId as string, authorId as string, isAdmin)
 
     sendResponse(res, {
         success: true,
@@ -89,5 +89,15 @@ const deletePost = catchAsync(async (req: Request, res: Response) => {
     })
 })
 
+const allStats = catchAsync(async (req: Request, res: Response) => {
+    const result = await postService.allStats()
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "all stats retrieve successfully",
+        data: result
+    })
+})
 
-export const postController = { createPost, getAllPost, getPostById, getMyAllPost, updatedPost, deletePost}
+
+export const postController = { createPost, getAllPost, getPostById, getMyAllPost, updatedPost, deletePost ,allStats}

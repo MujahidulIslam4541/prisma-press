@@ -1,4 +1,4 @@
-import { CommentStatus } from "../../../generated/prisma/enums"
+import { CommentStatus, PostStatus } from "../../../generated/prisma/enums"
 import { prisma } from "../../lib/prisma"
 import type { postInterface, postUpdateInterface } from "./post.types"
 
@@ -142,11 +142,45 @@ const deletePostIntoDB = async (postId: string, authorId: string, isAdmin: boole
     return result
 }
 
+
+const allStats = async () => {
+    const transactionResult = await prisma.$transaction(
+        async (tx) => {
+            const [totalPost, PublishPost, DraftPost, archivePost] = await Promise.all([
+                await tx.post.count(),
+
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.PUBLISHED
+                    }
+                }),
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.DRAFT
+                    }
+                }),
+                await tx.post.count({
+                    where: {
+                        status: PostStatus.ARCHIVE
+                    }
+                }),
+            ])
+
+            return {
+                totalPost, PublishPost, DraftPost, archivePost
+            }
+        }
+    )
+
+    return transactionResult;
+}
+
 export const postService = {
     createPostIntoDB,
     getAllPostInDB,
     getPostById,
     getMyAllPostIntoBD,
     updatedPostIntoDB,
-    deletePostIntoDB
+    deletePostIntoDB,
+    allStats
 }
