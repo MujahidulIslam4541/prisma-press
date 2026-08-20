@@ -1,4 +1,5 @@
 import type { PostStatus } from "../../../generated/prisma/enums"
+import type { PostWhereInput } from "../../../generated/prisma/models"
 
 export interface postInterface {
     title: string,
@@ -15,5 +16,13 @@ export interface postUpdateInterface {
     thumbnail?: string,
     status?: PostStatus
     tag: string[]
+}
+
+export interface postQuery extends PostWhereInput {
+    search?:string,
+    page?: string,
+    limit?: string,
+    sortBy?: string,
+    orderBy?: string
 }
 

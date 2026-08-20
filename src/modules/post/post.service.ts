@@ -1,6 +1,8 @@
+
 import { CommentStatus, PostStatus } from "../../../generated/prisma/enums"
+import type { PostWhereInput } from "../../../generated/prisma/models"
 import { prisma } from "../../lib/prisma"
-import type { postInterface, postUpdateInterface } from "./post.types"
+import type { postInterface, postQuery, postUpdateInterface } from "./post.types"
 
 const createPostIntoDB = async (payload: postInterface, userId: string) => {
     const createPost = await prisma.post.create({
@@ -13,8 +15,54 @@ const createPostIntoDB = async (payload: postInterface, userId: string) => {
     return createPost
 }
 
-const getAllPostInDB = async () => {
+const getAllPostInDB = async (query: postQuery) => {
+
+    const limit = query.limit ? Number(query.limit) : 10
+    const page = query.page ? Number(query.page) : 1;
+    const skip = (page - 1) * limit
+    const sortBy = query.sortBy ? query.sortBy : "createdAt";
+    const orderBy = query.orderBy ? query.orderBy : "desc"
+
+
+
     const allPost = await prisma.post.findMany({
+
+        where: {
+            AND: [
+
+                // search 
+                query.search ? {
+                    OR: [
+                        {
+                            title: {
+                                contains: query.search,
+                                mode: "insensitive"
+                            },
+                        },
+                        {
+                            content: {
+                                contains: query.search,
+                                mode: "insensitive"
+                            },
+                        }
+                    ]
+                } : {},
+
+                // filter
+                query.title ? { title: query.title } : {},
+                query.content ? { content: query.content } : {},
+
+
+            ]
+
+        },
+
+        take: limit,
+        skip: skip,
+        orderBy: {
+            [sortBy]: orderBy
+        },
+
         include: {
             author: {
                 omit: {
