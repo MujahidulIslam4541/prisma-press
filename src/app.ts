@@ -7,6 +7,7 @@ import { userRoutes } from "./modules/user/user.routes";
 import { authRoutes } from "./modules/auth/auth.routes";
 import { postRouter } from "./modules/post/post.routes";
 import { commentsRouter } from "./modules/comments/comment.routes";
+import { notFound } from "./middlewares/notFound";
 
 
 const app: Application = express();
@@ -28,8 +29,10 @@ app.get("/", (req: Request, res: Response) => {
 
 
 app.use("/api/users", userRoutes)
-app.use("/api/auth",authRoutes)
-app.use("/api/post",postRouter)
-app.use("/api/comment",commentsRouter)
+app.use("/api/auth", authRoutes)
+app.use("/api/post", postRouter)
+app.use("/api/comment", commentsRouter)
+
+app.use(notFound)
 
 export default app;
