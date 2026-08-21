@@ -11,6 +11,8 @@ model Post {
     author     User       @relation(fields: [authorId], references: [id],onDelete: Cascade)
     createdAt  DateTime   @default(now())
     updatedAt  DateTime   @updatedAt
+
+    isPremium Boolean @default(false)
     comment comment[]
 
     @@map("posts")

@@ -11,5 +11,6 @@
 export type * from './models/comment.ts'
 export type * from './models/Post.ts'
 export type * from './models/Profile.ts'
+export type * from './models/subscription.ts'
 export type * from './models/User.ts'
 export type * from './commonInputTypes.ts'

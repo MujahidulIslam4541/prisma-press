@@ -5,7 +5,9 @@
     "dev": "bun --watch src/index.ts",
     "start": "bun src/app.ts"
   },
-  "dependencies": {},
+  "dependencies": {
+    "stripe": "^22.5.0"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^26.2.0",
