@@ -3,6 +3,7 @@
   "module": "index.ts",
   "scripts": {
     "dev": "bun --watch src/index.ts",
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/api/subscription/webhook",
     "start": "bun src/app.ts"
   },
   "dependencies": {
