@@ -12,5 +12,6 @@ export default {
   jwt_refresh_token: process.env.JWT_REFRESH_SECRET!,
   jwt_access_token_aspiredIn: process.env.JWT_ACCESS_EXPIRES_IN!,
   jwt_refresh_token_aspiredIn: process.env.JWT_REFRESH_EXPIRES_IN!,
-  stripe_secret_key:process.env.STRIPE_SECRET_KEY
+  stripe_product_id:process.env.STRIPE_PRODUCT_ID!,
+  stripe_secret_key:process.env.STRIPE_SECRET_KEY!
 };

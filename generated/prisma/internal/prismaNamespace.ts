@@ -880,6 +880,7 @@ export const SubscriptionScalarFieldEnum = {
   status: 'status',
   startDate: 'startDate',
   endDate: 'endDate',
+  stripCustomerId: 'stripCustomerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
