@@ -79,6 +79,23 @@ const createWebhookInDB = async (payload: Buffer, signature: string) => {
     }
 
 }
+const getSubscriptionStatus = async (userId: string) => {
+    const isSubscriptionActive = await prisma.subscription.findUniqueOrThrow({
+        where: {
+            userId
+        }
+    })
+
+    const isActive = isSubscriptionActive.status === "ACTIVE" && isSubscriptionActive.endDate && new Date(isSubscriptionActive.endDate) > new Date()
+
+    return {
+        status: isSubscriptionActive.status,
+        isSubscribed: isActive,
+        currentPeriodEnd: isSubscriptionActive.endDate
+    }
+}
+
+
 
 const getSubscriptionEndDate = async (subscriptionId: string) => {
     const subscription = await stripe.subscriptions.retrieve(subscriptionId)
@@ -150,4 +167,4 @@ const handelChangeSubscription = async (payload: Stripe.Subscription) => {
 
 
 }
-export const subscriptionService = { createCheckOutSectionIntoDB, createWebhookInDB }
+export const subscriptionService = { createCheckOutSectionIntoDB, createWebhookInDB ,getSubscriptionStatus}

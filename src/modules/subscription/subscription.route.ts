@@ -5,9 +5,11 @@ import { Role } from "../../../generated/prisma/enums"
 
 const router = Router()
 
-router.post("/checkout",authMiddlewares(Role.USER) ,subscriptionController.createCheckOutSection)
+router.post("/checkout", authMiddlewares(Role.USER), subscriptionController.createCheckOutSection)
 
-router.post("/webhook",subscriptionController.createWebhook)
+router.get("/getSubscriptionStatus", authMiddlewares(Role.USER), subscriptionController.getSubscriptionStatus)
+
+router.post("/webhook", subscriptionController.createWebhook)
 
 
 
