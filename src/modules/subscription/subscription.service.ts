@@ -46,4 +46,35 @@ const createCheckOutSectionIntoDB = async (userId: string) => {
 
 }
 
-export const subscriptionService = { createCheckOutSectionIntoDB }
+const createWebhookInDB = async (payload: Buffer, signature: string) => {
+    const endpointSecret = config.stripe_webhook_secret
+
+    const event = await stripe.webhooks.constructEventAsync(
+        payload,
+        signature,
+        endpointSecret
+
+    )
+
+
+    switch (event.type) {
+        case 'checkout.session.completed':
+            const paymentIntent = event.data.object;
+
+            break;
+        case 'customer.subscription.created':
+            const paymentMethod = event.data.object;
+
+            break;
+        case 'customer.subscription.deleted':
+            const payment = event.data.object
+            break
+        default:
+            // Unexpected event type
+            console.log(`No Event Match Unhandled event type ${event.type}.`);
+            break
+    }
+
+}
+
+export const subscriptionService = { createCheckOutSectionIntoDB, createWebhookInDB }

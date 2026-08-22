@@ -18,4 +18,16 @@ const createCheckOutSection = catchAsync(async (req: Request, res: Response) => 
     })
 })
 
-export const subscriptionController = { createCheckOutSection }
+const createWebhook = catchAsync(async (req: Request, res: Response) => {
+    const event = req.body;
+    const signature = req.headers['stripe-signature'];
+    await subscriptionService.createWebhookInDB(event, signature as string)
+    sendResponse(res, {
+        success: true,
+        statusCode: HttpStatus.OK,
+        message: "webhook trigger successfully"
+    })
+
+})
+
+export const subscriptionController = { createCheckOutSection, createWebhook }
