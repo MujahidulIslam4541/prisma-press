@@ -120,11 +120,10 @@ export type ProfileScalarFieldEnum = (typeof ProfileScalarFieldEnum)[keyof typeo
 export const SubscriptionScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
-  plan: 'plan',
   status: 'status',
-  startDate: 'startDate',
   endDate: 'endDate',
   stripCustomerId: 'stripCustomerId',
+  subscriptionId: 'subscriptionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
