@@ -64,7 +64,8 @@ const getAllPostInDB = async (query: postQuery) => {
                 query.content ? { content: query.content } : {},
 
 
-            ]
+                {isPremium:false}
+            ],
 
         },
 
