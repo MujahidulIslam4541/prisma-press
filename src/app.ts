@@ -12,6 +12,7 @@ import HttpStatus from "http-status"
 import { errorHandler } from "./middlewares/globalErrorHandeller";
 import { subscriptionRoutes } from "./modules/subscription/subscription.route";
 import { stripe } from "./lib/stripe";
+import { premiumRoutes } from "./modules/premium/premium.routes";
 
 
 const app: Application = express();
@@ -43,6 +44,7 @@ app.use("/api/auth", authRoutes)
 app.use("/api/post", postRouter)
 app.use("/api/comment", commentsRouter)
 app.use("/api/subscription", subscriptionRoutes)
+app.use("/api/premium", premiumRoutes)
 
 app.use(notFound)
 

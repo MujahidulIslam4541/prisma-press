@@ -5,10 +5,21 @@ import { prisma } from "../../lib/prisma"
 import type { postInterface, postQuery, postUpdateInterface } from "./post.types"
 
 const createPostIntoDB = async (payload: postInterface, userId: string) => {
+    const subscription = await prisma.subscription.findUnique({
+        where: { userId }
+    })
+
+    const isActive = !!(
+        subscription?.status === "ACTIVE" &&
+        subscription.endDate &&
+        new Date(subscription.endDate) > new Date()
+    )
+
     const createPost = await prisma.post.create({
         data: {
             ...payload,
-            authorId: userId
+            authorId: userId,
+            isPremium: isActive
         }
     })
 
