@@ -35,64 +35,72 @@ const getAllPostInDB = async (query: postQuery) => {
     const orderBy = query.orderBy ? query.orderBy : "desc"
 
 
-
-    const allPost = await prisma.post.findMany({
-
-        where: {
-            AND: [
-
-                // search 
-                query.search ? {
-                    OR: [
-                        {
-                            title: {
-                                contains: query.search,
-                                mode: "insensitive"
-                            },
+    const whereCondition: PostWhereInput = {
+        AND: [
+            query.search ? {
+                OR: [
+                    {
+                        title: {
+                            contains: query.search,
+                            mode: "insensitive"
                         },
-                        {
-                            content: {
-                                contains: query.search,
-                                mode: "insensitive"
-                            },
-                        }
-                    ]
-                } : {},
+                    },
+                    {
+                        content: {
+                            contains: query.search,
+                            mode: "insensitive"
+                        },
+                    }
+                ]
+            } : {},
 
-                // filter
-                query.title ? { title: query.title } : {},
-                query.content ? { content: query.content } : {},
+            query.title ? { title: query.title } : {},
+            query.content ? { content: query.content } : {},
 
+            { isPremium: false }
+        ],
+    }
 
-                {isPremium:false}
-            ],
-
-        },
-
-        take: limit,
-        skip: skip,
-        orderBy: {
-            [sortBy]: orderBy
-        },
-
-        include: {
-            author: {
-                omit: {
-                    password: true
-                }
+    const [allPost, total] = await Promise.all([
+        prisma.post.findMany({
+            where: whereCondition,
+            take: limit,
+            skip: skip,
+            orderBy: {
+                [sortBy]: orderBy
             },
-            comment: true
-        }
-    })
-    return allPost;
-}
+            include: {
+                author: {
+                    omit: {
+                        password: true
+                    }
+                },
+                comment: true
+            }
+        }),
 
+        prisma.post.count({
+            where: whereCondition
+        })
+    ])
+
+    return {
+        data: allPost,
+        metaData: {
+            page: page,
+            limit: limit,
+            total: total,
+            totalPage: Math.ceil(total / limit)
+        }
+    };
+}
 const getPostById = async (id: string) => {
     const transactionResult = await prisma.$transaction(
         async (tx) => {
             await tx.post.update({
                 where: {
-                    id: id
+                    id: id,
+                    isPremium: false
                 },
                 data: {
                     view: {
